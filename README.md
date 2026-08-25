@@ -28,6 +28,10 @@ Client configs:
 ## Stack
 
 - Flutter + Riverpod + go_router
-- Firebase (Auth, Functions, Firestore, Storage, App Check, FCM, Analytics, Crashlytics)
-- Gemini via Cloud Functions only
+- Firebase Auth + Firestore (credits / jobs)
+- **Photo Fixer API** (`api/`) — Hono Node server
+- **Cloudflare R2** — temporary input/output images
+- Gemini via API only (key never in the app)
 - Native IAP (`in_app_purchase`) — no third-party payment SDKs
+
+See [`api/README.md`](./api/README.md) for running the processing backend.

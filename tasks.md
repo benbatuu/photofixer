@@ -156,78 +156,67 @@ Bu dosya `project.md` içeriğini **epik → task → kabul kriteri** yapısına
 
 ---
 
-## Epic 4 — Cloud Functions iskeleti (Day 3–4)
+## Epic 4 — Photo Fixer API (Day 3–4)
 
-### T4.1 Functions repo yapısı
+> Mimari güncelleme: Firebase Storage / Cloud Functions yerine **küçük Node API + Cloudflare R2**.  
+> Firebase Auth + Firestore kredi/job metadata için kalır. Gemini key yalnızca API’de.
+
+### T4.1 API iskeleti
 ```
-functions/src/
+api/src/
   index.ts
   config/
-  auth/
-  gemini/
-  payments/
-  notifications/
-  cleanup/
-  analytics/
+  middleware/
+  routes/
+  services/   # firebase, r2, gemini, credits
+  prompts/
+  errors.ts
 ```
-- [ ] TypeScript Functions bootstrap
-- [ ] Secrets: Gemini key Secret Manager / Functions secrets
-- [ ] Ortak error model (§41)
+- [x] Hono + TypeScript bootstrap (`api/`)
+- [x] Secrets: `.env` / host env (Gemini, R2, Firebase service account)
+- [x] Ortak error model (§41)
 
 ### T4.2 Standart API error codes
-- [ ] `UNAUTHENTICATED`, `APP_CHECK_FAILED`, `INVALID_IMAGE`, `IMAGE_TOO_LARGE`
-- [ ] `INSUFFICIENT_CREDITS`, `GEMINI_*`, `RATE_LIMITED`, `INTERNAL_ERROR`
-- [ ] `PURCHASE_NOT_VERIFIED`
-- [ ] Flutter mapping → kullanıcı dostu mesajlar
+- [x] `UNAUTHENTICATED`, `INVALID_IMAGE`, `IMAGE_TOO_LARGE`
+- [x] `INSUFFICIENT_CREDITS`, `GEMINI_*`, `RATE_LIMITED`, `INTERNAL_ERROR`
+- [ ] Flutter mapping → kullanıcı dostu mesajlar (client wiring)
 
-**Kabul:** Client asla raw Gemini/stacktrace göstermiyor.
+**Kabul:** Client asla raw Gemini/stacktrace görmüyor.
 
 ### T4.3 Rate limit & maliyet kontrolleri
-- [ ] Anonymous: 5 req/hour (config)
+- [x] Anonymous: 5 req/hour (env)
 - [ ] Higher paid limit (config)
-- [ ] Max image size, concurrent jobs, max 2 retries + backoff
-- [ ] Job metadata: model, operation, latency, success, estimatedCost
+- [x] Max image size, Gemini timeout, failure → credit release
+- [x] Job metadata: model, operation, latency, success/failure
 
 ---
 
 ## Epic 5 — Gemini photo processing (Day 4–6) — P0
 
-### T5.1 `processPhoto()` callable
-- [ ] Auth + App Check
-- [ ] Input validation (size, type, operation)
-- [ ] Credit reservation (atomic Firestore transaction)
-- [ ] Gemini call (key sadece backend)
-- [ ] Response validation
-- [ ] Temp Storage write + signed/short URL
-- [ ] Success → consume credit; failure → release
-- [ ] Job document status lifecycle
-
-**Input örneği:**
-```json
-{ "jobId": "...", "operation": "enhance", "imageBase64": "..." }
-```
-(Alternatif: Storage path upload + jobId — büyük payload için tercih edilebilir.)
+### T5.1 `POST /v1/process`
+- [x] Firebase ID token auth
+- [x] Input validation (size, type, operation)
+- [x] Credit reservation (atomic Firestore transaction)
+- [x] Gemini call (key sadece API)
+- [x] Response validation
+- [x] Temp object on Cloudflare R2 + signed/short URL
+- [x] Success → job complete; failure → credit release
+- [x] Job document status lifecycle
 
 ### T5.2 Model config
-- [ ] `GEMINI_IMAGE_MODEL` env/secret (client’a gömme)
-- [ ] Model değişince app update gerekmesin
+- [x] `GEMINI_IMAGE_MODEL` env (client’a gömme)
 
 ### T5.3 Prompt templates
-- [ ] Enhance (§8)
-- [ ] Relight
-- [ ] Restore
-- [ ] Unblur (aşırı vaat yok)
-
-**Kabul:** Her operation ayrı template; identity/composition korunumu talimatı var.
+- [x] Enhance / Relight / Restore / Unblur
 
 ### T5.4 Client `PhotoProcessingService`
-- [ ] Abstract service + Riverpod controller
+- [ ] Abstract service + Riverpod controller → API çağrısı
 - [ ] Widget içinde Firestore/Gemini yok
 - [ ] Loading sırasında ikinci job engeli
 
 ### T5.5 Privacy / TTL cleanup
-- [ ] Original + processed temporary
-- [ ] `cleanupTemporaryFiles()` scheduled
+- [x] Original + processed temporary on R2 (`users/{uid}/tmp/...`)
+- [ ] R2 lifecycle / scheduled cleanup
 - [ ] UI copy: temporary + secure processing
 - [ ] History: local metadata only (MVP)
 
