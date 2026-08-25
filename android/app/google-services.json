@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "447146531551",
+    "project_id": "photofixer-4bc1f",
+    "storage_bucket": "photofixer-4bc1f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:447146531551:android:a42acb55d6539b9915276a",
+        "android_client_info": {
+          "package_name": "com.bennbatuu.photofixer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDa29ybrgcC4ZB7kdJeCzDpxv2w--3-A2E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
