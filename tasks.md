@@ -128,21 +128,21 @@ Bu dosya `project.md` içeriğini **epik → task → kabul kriteri** yapısına
 **Kabul:** Kullanıcı hesabı olmadan tüm flow ilerler.
 
 ### T3.3 Firestore schema
-- [ ] `users/{uid}` — credits, platform, locale, flags, lastActiveAt
-- [ ] `users/{uid}/purchases/{purchaseId}`
-- [ ] `users/{uid}/credit_ledger/{ledgerId}`
-- [ ] `users/{uid}/jobs/{jobId}`
-- [ ] `users/{uid}/devices/{tokenHash}`
-- [ ] `config/app` — freeCredits, limits, maintenance, min versions
+- [x] `users/{uid}` — credits, platform, locale, flags, lastActiveAt
+- [x] `users/{uid}/purchases/{purchaseId}`
+- [x] `users/{uid}/credit_ledger/{ledgerId}`
+- [x] `users/{uid}/jobs/{jobId}`
+- [x] `users/{uid}/devices/{tokenHash}`
+- [x] `config/app` — freeCredits, limits, maintenance, min versions
 
 **Kabul:** Schema dokümante; index’ler hazır.
 
 ### T3.4 Security Rules (P0)
-- [ ] Client: kendi user/job **read**
-- [ ] Client: sınırlı preferences **write**
-- [ ] Client **yazamaz**: credits, purchases, ledger, verification
-- [ ] Storage: sadece authenticated + path owner; public list yok
-- [ ] `allow read, write: if true` production’da yasak
+- [x] Client: kendi user/job **read**
+- [x] Client: sınırlı preferences **write**
+- [x] Client **yazamaz**: credits, purchases, ledger, verification
+- [x] Storage: sadece authenticated + path owner; public list yok
+- [x] `allow read, write: if true` production’da yasak
 
 **Kabul:** Emulator veya rules unit test ile credits write reddediliyor.
 
