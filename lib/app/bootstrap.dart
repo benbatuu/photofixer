@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:photofixer/services/firebase/app_check_service.dart';
 import 'package:photofixer/services/firebase/auth_service.dart';
 import 'package:photofixer/services/firebase/firebase_bootstrap.dart';
 import 'package:photofixer/services/storage/local_storage.dart';
@@ -66,13 +67,21 @@ class BootstrapController extends StateNotifier<BootstrapState> {
   }
 }
 
-/// Boot steps — Auth is live; remaining steps fill in across Day 3–11.
+/// Boot steps — Firebase Core / App Check / Auth are live.
 class BootstrapHooks {
-  const BootstrapHooks({this.authService});
+  const BootstrapHooks({
+    this.authService,
+    this.appCheckService,
+  });
 
   final AuthService? authService;
+  final AppCheckService? appCheckService;
 
-  Future<void> initializeAppCheck() async {}
+  Future<void> initializeAppCheck() async {
+    final appCheck = appCheckService;
+    if (appCheck == null) return;
+    await appCheck.activate();
+  }
 
   Future<void> ensureAuthenticated() async {
     final auth = authService;
@@ -88,7 +97,10 @@ class BootstrapHooks {
 }
 
 final bootstrapHooksProvider = Provider<BootstrapHooks>((ref) {
-  return BootstrapHooks(authService: ref.watch(authServiceProvider));
+  return BootstrapHooks(
+    authService: ref.watch(authServiceProvider),
+    appCheckService: ref.watch(appCheckServiceProvider),
+  );
 });
 
 final bootstrapControllerProvider =
