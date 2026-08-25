@@ -2,10 +2,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:photofixer/app/app.dart';
+import 'package:photofixer/app/bootstrap.dart';
 import 'package:photofixer/services/firebase/firebase_bootstrap.dart';
 import 'package:photofixer/services/firebase/stub_firebase_bootstrap.dart';
 import 'package:photofixer/services/storage/local_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+List<Override> _testOverrides(SharedPreferences prefs) => [
+      sharedPreferencesProvider.overrideWithValue(prefs),
+      firebaseBootstrapProvider.overrideWithValue(
+        const StubFirebaseBootstrap(),
+      ),
+      bootstrapHooksProvider.overrideWithValue(const BootstrapHooks()),
+    ];
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -18,12 +27,7 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          sharedPreferencesProvider.overrideWithValue(prefs),
-          firebaseBootstrapProvider.overrideWithValue(
-            const StubFirebaseBootstrap(),
-          ),
-        ],
+        overrides: _testOverrides(prefs),
         child: const PhotoFixerApp(),
       ),
     );
@@ -43,12 +47,7 @@ void main() {
 
     await tester.pumpWidget(
       ProviderScope(
-        overrides: [
-          sharedPreferencesProvider.overrideWithValue(prefs),
-          firebaseBootstrapProvider.overrideWithValue(
-            const StubFirebaseBootstrap(),
-          ),
-        ],
+        overrides: _testOverrides(prefs),
         child: const PhotoFixerApp(),
       ),
     );

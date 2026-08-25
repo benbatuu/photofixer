@@ -121,9 +121,9 @@ Bu dosya `project.md` içeriğini **epik → task → kabul kriteri** yapısına
 **Kabul:** Config dosyaları doğru yerde; `Firebase.initializeApp` bootstrap’ta çalışıyor.
 
 ### T3.2 Anonymous Auth
-- [ ] İlk açılışta anonymous sign-in
-- [ ] Email/signup yok
-- [ ] `users/{uid}` document create (server veya controlled client fields)
+- [x] İlk açılışta anonymous sign-in
+- [x] Email/signup yok
+- [x] `users/{uid}` document create (server veya controlled client fields)
 
 **Kabul:** Kullanıcı hesabı olmadan tüm flow ilerler.
 
