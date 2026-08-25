@@ -147,9 +147,9 @@ Bu dosya `project.md` içeriğini **epik → task → kabul kriteri** yapısına
 **Kabul:** Emulator veya rules unit test ile credits write reddediliyor.
 
 ### T3.5 App Check
-- [ ] Android Play Integrity (prod)
-- [ ] iOS DeviceCheck / App Attest (prod)
-- [ ] Debug provider (dev only)
+- [x] Android Play Integrity (prod)
+- [x] iOS DeviceCheck / App Attest (prod)
+- [x] Debug provider (dev only)
 - [ ] Prod’da debug token bırakma
 
 **Kabul:** Callable Functions App Check token bekliyor (en az enforce planı).
