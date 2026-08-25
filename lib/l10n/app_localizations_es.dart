@@ -158,4 +158,23 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get editorPermissionHint =>
       'We only access the photos you choose to enhance.';
+
+  @override
+  String get editorErrorNoCredits => 'You\'re out of photo credits.';
+
+  @override
+  String get editorErrorRateLimited =>
+      'Too many requests. Please wait a bit and try again.';
+
+  @override
+  String get editorErrorBlocked => 'This image can\'t be processed.';
+
+  @override
+  String get editorErrorAuth => 'Please restart the app and try again.';
+
+  @override
+  String get resultSuccess => 'Enhanced successfully.';
+
+  @override
+  String get resultEnhanceAnother => 'Enhance another';
 }

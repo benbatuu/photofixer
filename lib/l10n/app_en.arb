@@ -47,5 +47,11 @@
   "editorErrorTooLarge": "This photo is too large. Try another one.",
   "editorErrorInvalid": "This image can't be processed. Try another one.",
   "editorTryAgain": "Try again",
-  "editorPermissionHint": "We only access the photos you choose to enhance."
+  "editorPermissionHint": "We only access the photos you choose to enhance.",
+  "editorErrorNoCredits": "You're out of photo credits.",
+  "editorErrorRateLimited": "Too many requests. Please wait a bit and try again.",
+  "editorErrorBlocked": "This image can't be processed.",
+  "editorErrorAuth": "Please restart the app and try again.",
+  "resultSuccess": "Enhanced successfully.",
+  "resultEnhanceAnother": "Enhance another"
 }

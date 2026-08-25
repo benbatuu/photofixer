@@ -397,6 +397,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'We only access the photos you choose to enhance.'**
   String get editorPermissionHint;
+
+  /// No description provided for @editorErrorNoCredits.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re out of photo credits.'**
+  String get editorErrorNoCredits;
+
+  /// No description provided for @editorErrorRateLimited.
+  ///
+  /// In en, this message translates to:
+  /// **'Too many requests. Please wait a bit and try again.'**
+  String get editorErrorRateLimited;
+
+  /// No description provided for @editorErrorBlocked.
+  ///
+  /// In en, this message translates to:
+  /// **'This image can\'t be processed.'**
+  String get editorErrorBlocked;
+
+  /// No description provided for @editorErrorAuth.
+  ///
+  /// In en, this message translates to:
+  /// **'Please restart the app and try again.'**
+  String get editorErrorAuth;
+
+  /// No description provided for @resultSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Enhanced successfully.'**
+  String get resultSuccess;
+
+  /// No description provided for @resultEnhanceAnother.
+  ///
+  /// In en, this message translates to:
+  /// **'Enhance another'**
+  String get resultEnhanceAnother;
 }
 
 class _AppLocalizationsDelegate

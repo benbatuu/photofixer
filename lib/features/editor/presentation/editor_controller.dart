@@ -1,9 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:photofixer/core/errors/api_exception.dart';
+import 'package:photofixer/services/network/photo_processing_service.dart';
 import 'package:photofixer/services/storage/app_image_picker.dart';
 import 'package:photofixer/services/storage/image_prep_service.dart';
 import 'package:photofixer/shared/models/photo_operation.dart';
+import 'package:photofixer/shared/models/process_photo_result.dart';
 
 /// Photo processing UI state machine (project.md §18).
 enum EditorPhase {
@@ -22,6 +25,7 @@ class EditorState {
     required this.operation,
     this.originalPath,
     this.prepared,
+    this.result,
     this.errorCode,
     this.errorMessage,
     this.isBusy = false,
@@ -36,6 +40,7 @@ class EditorState {
   final PhotoOperation operation;
   final String? originalPath;
   final PreparedImage? prepared;
+  final ProcessPhotoResult? result;
   final String? errorCode;
   final String? errorMessage;
   final bool isBusy;
@@ -45,17 +50,20 @@ class EditorState {
     PhotoOperation? operation,
     String? originalPath,
     PreparedImage? prepared,
+    ProcessPhotoResult? result,
     String? errorCode,
     String? errorMessage,
     bool? isBusy,
     bool clearError = false,
     bool clearPrepared = false,
+    bool clearResult = false,
   }) {
     return EditorState(
       phase: phase ?? this.phase,
       operation: operation ?? this.operation,
       originalPath: originalPath ?? this.originalPath,
       prepared: clearPrepared ? null : (prepared ?? this.prepared),
+      result: clearResult ? null : (result ?? this.result),
       errorCode: clearError ? null : (errorCode ?? this.errorCode),
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
       isBusy: isBusy ?? this.isBusy,
@@ -68,10 +76,12 @@ class EditorController extends StateNotifier<EditorState> {
     required PhotoOperation operation,
     required this._picker,
     required this._prepService,
+    required this._processingService,
   }) : super(EditorState.initial(operation));
 
   final AppImagePicker _picker;
   final ImagePrepService _prepService;
+  final PhotoProcessingService _processingService;
 
   void setOperation(PhotoOperation operation) {
     if (state.isBusy) return;
@@ -91,6 +101,7 @@ class EditorController extends StateNotifier<EditorState> {
         originalPath: file.path,
         clearError: true,
         clearPrepared: true,
+        clearResult: true,
       );
 
       final prepared = await _prepService.prepareForUpload(File(file.path));
@@ -117,7 +128,6 @@ class EditorController extends StateNotifier<EditorState> {
     }
   }
 
-  /// Backend wiring comes in Epic 5 — stub advances through phases safely.
   Future<void> startProcessing() async {
     if (state.isBusy || state.prepared == null) return;
     if (state.phase != EditorPhase.selected &&
@@ -129,20 +139,51 @@ class EditorController extends StateNotifier<EditorState> {
       phase: EditorPhase.uploading,
       isBusy: true,
       clearError: true,
+      clearResult: true,
     );
 
-    await Future<void>.delayed(const Duration(milliseconds: 400));
-    if (!mounted) return;
+    try {
+      state = state.copyWith(phase: EditorPhase.processing);
 
-    state = state.copyWith(phase: EditorPhase.processing);
-    await Future<void>.delayed(const Duration(milliseconds: 800));
-    if (!mounted) return;
+      final apiResult = await _processingService.process(
+        image: state.prepared!.uploadFile,
+        operation: state.operation,
+      );
 
-    // Stub success until Gemini Cloud Function exists.
-    state = state.copyWith(
-      phase: EditorPhase.completed,
-      isBusy: false,
-    );
+      if (!mounted) return;
+
+      final result = ProcessPhotoResult(
+        jobId: apiResult.jobId,
+        operation: apiResult.operation,
+        resultUrl: apiResult.resultUrl,
+        originalPath: state.originalPath ?? state.prepared!.originalPath,
+        creditsCharged: apiResult.creditsCharged,
+        latencyMs: apiResult.latencyMs,
+        expiresInSeconds: apiResult.expiresInSeconds,
+      );
+
+      state = state.copyWith(
+        phase: EditorPhase.completed,
+        result: result,
+        isBusy: false,
+      );
+    } on ApiException catch (e) {
+      if (!mounted) return;
+      state = state.copyWith(
+        phase: EditorPhase.error,
+        isBusy: false,
+        errorCode: e.code,
+        errorMessage: userMessageForApiCode(e.code),
+      );
+    } catch (_) {
+      if (!mounted) return;
+      state = state.copyWith(
+        phase: EditorPhase.error,
+        isBusy: false,
+        errorCode: 'INTERNAL_ERROR',
+        errorMessage: userMessageForApiCode('INTERNAL_ERROR'),
+      );
+    }
   }
 
   void resetErrorToSelected() {
@@ -172,5 +213,6 @@ final editorControllerProvider = StateNotifierProvider.autoDispose
     operation: operation,
     picker: ref.watch(appImagePickerProvider),
     prepService: ref.watch(imagePrepServiceProvider),
+    processingService: ref.watch(photoProcessingServiceProvider),
   );
 });

@@ -179,7 +179,7 @@ api/src/
 ### T4.2 Standart API error codes
 - [x] `UNAUTHENTICATED`, `INVALID_IMAGE`, `IMAGE_TOO_LARGE`
 - [x] `INSUFFICIENT_CREDITS`, `GEMINI_*`, `RATE_LIMITED`, `INTERNAL_ERROR`
-- [ ] Flutter mapping → kullanıcı dostu mesajlar (client wiring)
+- [x] Flutter mapping → kullanıcı dostu mesajlar (client wiring)
 
 **Kabul:** Client asla raw Gemini/stacktrace görmüyor.
 
@@ -210,9 +210,9 @@ api/src/
 - [x] Enhance / Relight / Restore / Unblur
 
 ### T5.4 Client `PhotoProcessingService`
-- [ ] Abstract service + Riverpod controller → API çağrısı
-- [ ] Widget içinde Firestore/Gemini yok
-- [ ] Loading sırasında ikinci job engeli
+- [x] Abstract service + Riverpod controller → API çağrısı
+- [x] Widget içinde Firestore/Gemini yok
+- [x] Loading sırasında ikinci job engeli
 
 ### T5.5 Privacy / TTL cleanup
 - [x] Original + processed temporary on R2 (`users/{uid}/tmp/...`)

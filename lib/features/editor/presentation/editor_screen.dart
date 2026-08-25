@@ -26,8 +26,8 @@ class EditorScreen extends ConsumerWidget {
     final controller = ref.read(editorControllerProvider(operation).notifier);
 
     ref.listen<EditorState>(editorControllerProvider(operation), (prev, next) {
-      if (next.phase == EditorPhase.completed) {
-        context.push(AppRoutes.result);
+      if (next.phase == EditorPhase.completed && next.result != null) {
+        context.push(AppRoutes.result, extra: next.result);
       }
     });
 
@@ -125,6 +125,10 @@ class EditorScreen extends ConsumerWidget {
     return switch (code) {
       'IMAGE_TOO_LARGE' => l10n.editorErrorTooLarge,
       'INVALID_IMAGE' => l10n.editorErrorInvalid,
+      'INSUFFICIENT_CREDITS' => l10n.editorErrorNoCredits,
+      'RATE_LIMITED' => l10n.editorErrorRateLimited,
+      'GEMINI_BLOCKED' => l10n.editorErrorBlocked,
+      'UNAUTHENTICATED' => l10n.editorErrorAuth,
       _ => l10n.editorErrorTitle,
     };
   }
