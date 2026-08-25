@@ -6,18 +6,26 @@ class AppCheckService {
   const AppCheckService();
 
   Future<void> activate() async {
-    await FirebaseAppCheck.instance.activate(
-      providerAndroid: kDebugMode
-          ? const AndroidDebugProvider()
-          : const AndroidPlayIntegrityProvider(),
-      providerApple: kDebugMode
-          ? const AppleDebugProvider()
-          : const AppleAppAttestProvider(),
-    );
+    try {
+      await FirebaseAppCheck.instance.activate(
+        providerAndroid: kDebugMode
+            ? const AndroidDebugProvider()
+            : const AndroidPlayIntegrityProvider(),
+        providerApple: kDebugMode
+            ? const AppleDebugProvider()
+            : const AppleAppAttestProvider(),
+      );
 
-    if (kDebugMode) {
-      // ignore: avoid_print
-      print('[app_check] activated (debug provider)');
+      if (kDebugMode) {
+        // ignore: avoid_print
+        print('[app_check] activated (debug provider)');
+      }
+    } catch (e) {
+      // Don't block app launch if App Check isn't configured in Console yet.
+      if (kDebugMode) {
+        // ignore: avoid_print
+        print('[app_check] skipped: $e');
+      }
     }
   }
 }
