@@ -2,6 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:photofixer/app/app.dart';
+import 'package:photofixer/services/firebase/firebase_bootstrap.dart';
+import 'package:photofixer/services/firebase/stub_firebase_bootstrap.dart';
 import 'package:photofixer/services/storage/local_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,6 +20,9 @@ void main() {
       ProviderScope(
         overrides: [
           sharedPreferencesProvider.overrideWithValue(prefs),
+          firebaseBootstrapProvider.overrideWithValue(
+            const StubFirebaseBootstrap(),
+          ),
         ],
         child: const PhotoFixerApp(),
       ),
@@ -40,6 +45,9 @@ void main() {
       ProviderScope(
         overrides: [
           sharedPreferencesProvider.overrideWithValue(prefs),
+          firebaseBootstrapProvider.overrideWithValue(
+            const StubFirebaseBootstrap(),
+          ),
         ],
         child: const PhotoFixerApp(),
       ),

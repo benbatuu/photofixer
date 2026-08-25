@@ -114,9 +114,11 @@ Bu dosya `project.md` içeriğini **epik → task → kabul kriteri** yapısına
 ## Epic 3 — Firebase Auth, Firestore, App Check (Day 3)
 
 ### T3.1 Firebase projesi
-- [ ] Android `google-services.json` / iOS `GoogleService-Info.plist` (git’e secret koyma disiplini)
-- [ ] Firebase Core, Auth, Firestore, Storage, Analytics, Crashlytics, FCM, App Check paketleri
+- [x] Android `google-services.json` / iOS `GoogleService-Info.plist` (git’e secret koyma disiplini)
+- [x] Firebase Core, Auth, Firestore, Storage, Analytics, Crashlytics, FCM, App Check paketleri
 - [ ] Dev vs Prod Firebase ortam ayrımı (mümkünse)
+
+**Kabul:** Config dosyaları doğru yerde; `Firebase.initializeApp` bootstrap’ta çalışıyor.
 
 ### T3.2 Anonymous Auth
 - [ ] İlk açılışta anonymous sign-in
